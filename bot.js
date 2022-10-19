@@ -1,4 +1,5 @@
 require('dotenv').config()
+const fs = require('fs')
 const { Client, Events, GatewayIntentBits } = require('discord.js');
 const client = new Client(
     {
@@ -12,12 +13,10 @@ const client = new Client(
 
 client.on('ready',async () => {
    console.log('I am sentient')
-    const res = await fetch('https://dps.report/getUploadMetadata?permalink=YQE1-20221019-212542_golem')
-    console.log(res)
-    const reader = res.body.getReader()
-    let read = await reader.read()
-    const str = String.fromCharCode.apply(null, read.value)
-    console.log(str)
+    const res = await fetch('https://dps.report/getJson?permalink=YQE1-20221019-212542_golem')
+    let body = await res.json()
+    console.log(body)
+    fs.writeFileSync('test.json', JSON.stringify(body))
 })
 
 client.on(Events.MessageCreate, message => {
