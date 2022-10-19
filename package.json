@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "dependencies": {
     "discord.js": "^14.5.0",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "nodemon": "^2.0.20"
   },
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
-    "start": "node index.js",
+    "start": "node bot.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
