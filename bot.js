@@ -13,10 +13,13 @@ const client = new Client(
 
 client.on('ready',async () => {
    console.log('I am sentient')
-    const res = await fetch('https://dps.report/getJson?permalink=YQE1-20221019-212542_golem')
+    const res = await fetch('https://dps.report/getJson?permalink=0x1M-20221017-220008_sh')
     let body = await res.json()
-    console.log(body)
-    fs.writeFileSync('test.json', JSON.stringify(body))
+    for (let player of body.players) {
+        if (player.deathRecap) {
+            console.log(`${player.name} died to ${body.fightName}, LOL`)
+        }
+    }
 })
 
 client.on(Events.MessageCreate, message => {
