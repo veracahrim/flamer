@@ -39,13 +39,13 @@ client.on(Events.MessageCreate, async message => {
         let tts = client.channels.cache.find(c => c.name === 'tts')
         console.log(body)
         if (body && body.players) {
-            for (let player of body.players) {
-                if (player.deathRecap) {
+            const deads = body.players.filter(p => p.deathRecap)
+                if (deads && deads.length) {
+                    const dead = deads[Math.floor(Math.random(deads.length))]
                     deaths = true
-                    const msg = getDeathMessage(player.name, body.fightName)
-                    tts.send(msg)
+                    const msg = getDeathMessage(dead.name, body.fightName)
+                    await tts.send(msg)
                 }
-            }
         }
         if (!deaths){
             tts.send(getSuccessMessage())
@@ -60,7 +60,7 @@ function getSuccessMessage() {
 }
 
 function getDeathMessage(player, fight) {
-    let msg = deathMessages[Math.floor(Math.random() * deathMessages.length - 1)]
+    let msg = deathMessages[Math.floor(Math.random() * deathMessages.length)]
     msg = msg.replace('$$', player)
     msg = msg.replace('§§', fight)
     return msg
@@ -99,5 +99,6 @@ const deathMessages = [
     'still can\'t get a clean §§?, right $$?',
     'looks like §§ is still too hard for some people. like for example $$.',
     'that stream is boring $$.',
-    'i\'m sure next time you\'ll survive $$, even against §§'
+    'i\'m sure next time you\'ll survive $$, even against §§',
+    'rip $$'
 ]
