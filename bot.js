@@ -23,29 +23,20 @@ client.on('ready',async () => {
 
 })
 
+
+
+
 client.on(Events.MessageCreate, async message => {
     let url
     if (message.embeds && message.embeds[0] && message.embeds[0].data) {
         url = message.embeds[0].data.url
     }
-    console.log(url)
     if ((message.author.username === 'Successful Log Uploader' || message.author.username === 'Failure Log Uploader') && url) {
-        const splitUrl = url.split('/')
-        const permalink = splitUrl[splitUrl.length-1]
-        const res = await fetch(`https://dps.report/getJson?permalink=${permalink}`)
-        console.log(res)
-        let body = await res.json()
+        let body = await getLogJSON(url);
         let deaths = false
         let tts = client.channels.cache.find(c => c.name === 'tts')
-        console.log(body)
         if (body && body.players) {
-            const deads = body.players.filter(p => p.deathRecap)
-                if (deads && deads.length) {
-                    const dead = deads[Math.floor(Math.random(deads.length))]
-                    deaths = true
-                    const msg = getDeathMessage(dead.name, body.fightName)
-                    await tts.send(msg)
-                }
+            deaths = await handleDeaths(body, deaths, tts);
         }
         if (!deaths){
             tts.send(getSuccessMessage())
@@ -54,6 +45,25 @@ client.on(Events.MessageCreate, async message => {
 });
 
 client.login(process.env.DISCORD_TOKEN)
+
+async function getLogJSON(url) {
+    const splitUrl = url.split('/')
+    const permalink = splitUrl[splitUrl.length - 1]
+    const res = await fetch(`https://dps.report/getJson?permalink=${permalink}`)
+    return await res.json();
+}
+
+async function handleDeaths(body, deaths, tts) {
+    const deads = body.players.filter(p => p.deathRecap)
+    if (deads && deads.length) {
+        const dead = deads[Math.floor(Math.random(deads.length))]
+        deaths = true
+        const msg = getDeathMessage(dead.name, body.fightName)
+        await tts.send(msg)
+    }
+    return deaths;
+}
+
 
 function getSuccessMessage() {
     return messagesSuccess[Math.floor(Math.random() * messagesSuccess.length)]
