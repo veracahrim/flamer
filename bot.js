@@ -14,17 +14,13 @@ const client = new Client(
 
 client.on('ready',async () => {
     const ch = client.channels.cache.find(c => c.name==="Generic Voice Chat Name")
-    const connection = joinVoiceChannel({
+    joinVoiceChannel({
         channelId: ch.id,
         guildId: ch.guild.id,
         adapterCreator: ch.guild.voiceAdapterCreator,
     });
     console.log('i am sentient')
-
 })
-
-
-
 
 client.on(Events.MessageCreate, async message => {
     let url
