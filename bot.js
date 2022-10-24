@@ -69,11 +69,13 @@ function getSuccessMessage() {
 
 function getDeathMessage(player, fight) {
     let msg = deathMessages[Math.floor(Math.random() * deathMessages.length)]
+    let random = Math.random()
+    console.log(random)
+    if (random < 0.1) {
+        msg = Messages[player][Math.floor(Math.random() * Messages[player].length)]
+    }
     msg = msg.replace('$$', player)
     msg = msg.replace('§§', fight)
-    if (Math.random() < 0.1) {
-        msg = Messages.player[0]
-    }
     return msg
 }
 
@@ -98,7 +100,7 @@ const messagesSuccess = [
 //$$ as placeholders for playername, §§ as placeholders for fight name
 const deathMessages = [
     'Looks like $$ broke their fingers',
-    'still can\'t get a clean §§?, right $$?',
+    'still can\'t get a clean §§? right $$?',
     'looks like §§ is still too hard for some people. like for example $$.',
     'that stream is boring $$.',
     'i\'m sure next time you\'ll survive $$, even against §§',
@@ -116,6 +118,9 @@ const deathMessages = [
     '$$ is dead again.',
     'I can see that you are struggling with the mechanics, $$. Have you tried installing Blish?',
     'Maybe you should play something a little bit easier, $$. May I suggest power me- Oh right, nevermind',
+    'Those are some Owlmind level tactics right there, $$',
+    'Don\'t look at $$ for motivation',
+    "Why are you even here, $$?"
 ]
 
 const DISCORD_NAMES = {
@@ -172,7 +177,7 @@ const ignDiscordnameMap = new Map([
 const Messages =  {
     [DISCORD_NAMES.VEX]: ['Looks like addons couldnt save you this time, Vex'],
     [DISCORD_NAMES.PASTA]: ['Megapasta Pasta way'],
-    [DISCORD_NAMES.DINGLEBERRY]: ['Dinleberry? More like Cringeleberry'],
+    [DISCORD_NAMES.DINGLEBERRY]: ['Dinleberry? More like Cringeleberry', 'Don\'t take it personally, Dingle. §§ is clearly antisemitic.'],
     [DISCORD_NAMES.VERAC]: ['So much for "Supreme Leader"'],
     [DISCORD_NAMES.SAMMI]: ['Maybe you should stop eating during raids sammi.'],
     [DISCORD_NAMES.ZALI]: ['maybe something easier to play would help, consider power mech, Zali'],
