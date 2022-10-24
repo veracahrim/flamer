@@ -54,7 +54,9 @@ async function handleDeaths(body, deaths, tts) {
     if (deads && deads.length) {
         const dead = deads[Math.floor(Math.random(deads.length))]
         deaths = true
-        const msg = getDeathMessage(dead.name, body.fightName)
+        let name = dead.name
+        name = ignDiscordnameMap.get(name) ? ignDiscordnameMap.get(name) : name
+        const msg = getDeathMessage(name, body.fightName)
         await tts.send(msg)
     }
     return deaths;
@@ -69,6 +71,9 @@ function getDeathMessage(player, fight) {
     let msg = deathMessages[Math.floor(Math.random() * deathMessages.length)]
     msg = msg.replace('$$', player)
     msg = msg.replace('§§', fight)
+    if (Math.random() < 0.1) {
+        msg = Messages.player[0]
+    }
     return msg
 }
 
@@ -77,34 +82,102 @@ const messagesSuccess = [
     'Incredible',
     'It only took us well over a year to get this good. Other people definitely can\'t do it better',
     'Congrats',
+    'Good job',
     'That\'s some next level shit.',
     'We\'re big dills now',
-    'get carried dingle',
     'i am pleased',
     'i am happy',
     'now take a well deserved break, except you, dingle',
-    'zali going hard again',
     'looks like pasta wasn\'t sleeping this time',
     'even the mountain jews approve',
     'if we keep up that learning curve we\'ll be halfway decent in about 10 years',
-    'the heal mechs are at it again',
     'looks like we could start selling raids. only the easy ones tho.',
     'Congratulations! There\'s your reward for all the hard work you put in! Enjoy every bit of it!',
-    'wow',
-    'amazing',
-    'rollin',
-    'addons for the win',
-    'praise dolyak',
-    'sexy',
-    'owo',
 ]
 
 //$$ as placeholders for playername, §§ as placeholders for fight name
 const deathMessages = [
-    'Looks like $$ broke his fingers',
+    'Looks like $$ broke their fingers',
     'still can\'t get a clean §§?, right $$?',
     'looks like §§ is still too hard for some people. like for example $$.',
     'that stream is boring $$.',
     'i\'m sure next time you\'ll survive $$, even against §§',
-    'rip $$'
+    'rip $$',
+    'another day, another death for $$.',
+    'git gud $$',
+    '$$ should have dodged, or blocked, or, i dont know... not died?',
+    'i love making fun about $$\'s suffering.',
+    '§§: 1, $$: 0.',
+    'Maybe you should use soldier gear, $$',
+    '$$, did you apply the anvil buff?',
+    'Make sure you watch a video of §§ first, $$',
+    'Maybe emboldened mode is more suitable for you, $$',
+    'Are you sure you selected stats on all of your armor pieces, $$?',
+    '$$ is dead again.',
+    'I can see that you are struggling with the mechanics, $$. Have you tried installing Blish?',
+    'Maybe you should play something a little bit easier, $$. May I suggest power me- Oh right, nevermind',
 ]
+
+const DISCORD_NAMES = {
+    VERAC: 'Verac',
+    FRED: 'Fred',
+    PASTA: 'MegaPasta',
+    AGENT: 'Agent',
+    DERP: 'Derp',
+    VEX: 'Vex',
+    SAMMI: 'Sammi',
+    ZALI: 'Zali',
+    DINGLEBERRY: 'Dingleberry',
+    ENCIATKO: 'Enciatko',
+}
+
+const ignDiscordnameMap = new Map([
+    ['Erdbeer Joghurt', DISCORD_NAMES.VERAC],
+    ['Schoggi Gipfeli', DISCORD_NAMES.VERAC],
+    ['Vorinia Gales', DISCORD_NAMES.VERAC],
+    ['Pia Oceania', DISCORD_NAMES.VERAC],
+    ['Tamn Vertand', DISCORD_NAMES.VERAC],
+    ['Chuchichäschtli', DISCORD_NAMES.VERAC],
+    ['Janamiri', DISCORD_NAMES.VERAC],
+    ['Fantastic Freya', DISCORD_NAMES.FRED],
+    ['Fantastic Fred', DISCORD_NAMES.FRED],
+    ['Ferocious Freya', DISCORD_NAMES.FRED],
+    ['Subpar Sabetha', DISCORD_NAMES.FRED],
+    ['Lil Kleintje', DISCORD_NAMES.PASTA],
+    ['Jokos Mommy', DISCORD_NAMES.PASTA],
+    ['Axetremely Norny', DISCORD_NAMES.PASTA],
+    ['Dolyak The Majestic', DISCORD_NAMES.AGENT],
+    ['Agent of Darkness', DISCORD_NAMES.AGENT],
+    ['Bubble Salami', DISCORD_NAMES.DERP],
+    ['Sadenean', DISCORD_NAMES.DERP],
+    ['Toxic Vex', DISCORD_NAMES.VEX],
+    ['Tinkerfurr', DISCORD_NAMES.VEX],
+    ['Lorna Deathknell', DISCORD_NAMES.SAMMI],
+    ['Miah Crossfire', DISCORD_NAMES.SAMMI],
+    ['Evelyn Thornroot', DISCORD_NAMES.SAMMI],
+    ['Carliah Whisperoak', DISCORD_NAMES.SAMMI],
+    ['Zalibeast', DISCORD_NAMES.ZALI],
+    ['Zali Nex', DISCORD_NAMES.ZALI],
+    ['Zalindrae', DISCORD_NAMES.ZALI],
+    ['Adriana Elise', DISCORD_NAMES.ZALI],
+    ['Doctor Dingleberry', DISCORD_NAMES.DINGLEBERRY],
+    ['Nagilmar', DISCORD_NAMES.DINGLEBERRY],
+    ['Look Im A Treeee', DISCORD_NAMES.DINGLEBERRY],
+    ['Shignis', DISCORD_NAMES.ENCIATKO],
+    ['Aileen Igniferous', DISCORD_NAMES.ENCIATKO],
+])
+
+
+  
+const Messages =  {
+    [DISCORD_NAMES.VEX]: ['Looks like addons couldnt save you this time, Vex'],
+    [DISCORD_NAMES.PASTA]: ['Megapasta Pasta way'],
+    [DISCORD_NAMES.DINGLEBERRY]: ['Dinleberry? More like Cringeleberry'],
+    [DISCORD_NAMES.VERAC]: ['So much for "Supreme Leader"'],
+    [DISCORD_NAMES.SAMMI]: ['Maybe you should stop eating during raids sammi.'],
+    [DISCORD_NAMES.ZALI]: ['maybe something easier to play would help, consider power mech, Zali'],
+    [DISCORD_NAMES.DERP]: ['username checks out, derp.'],
+    [DISCORD_NAMES.ENCIATKO]: ['Should have healed more, enciatko'],
+    [DISCORD_NAMES.FRED]: ['fred is dead'],
+    [DISCORD_NAMES.AGENT]: ['Unfortunately you still have to avoid damage as a power mech, agent.'],
+}
