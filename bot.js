@@ -120,7 +120,8 @@ const deathMessages = [
     'Maybe you should play something a little bit easier, $$. May I suggest power me- Oh right, nevermind',
     'Those are some Owlmind level tactics right there, $$',
     'Don\'t look at $$ for motivation',
-    "Why are you even here, $$?"
+    "Why are you even here, $$?",
+    "Would you like to be moved to backup, $$?",
 ]
 
 const DISCORD_NAMES = {
