@@ -22,6 +22,7 @@ client.on('ready', async () => {
     console.log('i am sentient')
 })
 
+const recentlyFlamed = []
 client.on(Events.MessageCreate, async message => {
     let url
     if (message.embeds && message.embeds[0] && message.embeds[0].data) {
@@ -29,6 +30,11 @@ client.on(Events.MessageCreate, async message => {
     }
     if ((message.author.username === 'Successful Log Uploader' || message.author.username === 'Failure Log Uploader') && url) {
         let body = await getLogJSON(url);
+        let str = body.fightName + new Date().toString() + '.json'
+        str = str.replaceAll(' ', '_')
+        str = str.replaceAll('+', '_')
+        str = str.replaceAll(':', '_')
+        fs.writeFileSync(str, JSON.stringify(body))
         let deaths = false
         let tts = client.channels.cache.find(c => c.name === 'tts')
         if (body && body.players) {
@@ -50,7 +56,9 @@ async function getLogJSON(url) {
 }
 
 async function handleDeaths(body, deaths, tts) {
-    const deads = body.players.filter(p => p.deathRecap)
+    let deads = body.players.filter(p => {
+        return p.deathRecap
+    })
     if (deads && deads.length) {
         const dead = deads[Math.floor(Math.random(deads.length))]
         deaths = true
@@ -58,6 +66,10 @@ async function handleDeaths(body, deaths, tts) {
         name = ignDiscordnameMap.get(name) ? ignDiscordnameMap.get(name) : name
         const msg = getDeathMessage(name, body.fightName)
         await tts.send(msg)
+        recentlyFlamed.unshift(name)
+        if (recentlyFlamed.length >= 3) {
+            recentlyFlamed.pop()
+        }
     }
     return deaths;
 }
@@ -151,7 +163,7 @@ const messagesSuccess = [
     'That\'s absolutely excellent, you\'re like, really good',
     'Wow, that\'s awesome! Did you even do that to look cool?',
     'Congratulations, you\'ve just become a legend!',
-    'Way to go, world\'s toughest dog trainers'
+    'Way to go, world\'s toughest dog trainers',
 ]
 
 //$$ as placeholders for playername, §§ as placeholders for fight name
@@ -178,6 +190,7 @@ const deathMessages = [
     'Those are some Owlmind level tactics right there, $$',
     'Don\'t look at $$ for motivation',
     "Why are you even here, $$?",
+    "You have an intriguing air about you, $$, you fail continuously yet it does not seem to impact your morale.",
     "Would you like to be moved to backup, $$?",
     'Hey, there\'s only a handful of us left, aren\'t you going to let us win this fight, $$?',
     'I think you\'re doing a fine job at sucking, $$',
