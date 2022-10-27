@@ -162,7 +162,7 @@ const deathMessages = [
     'it\'s time for you to die, $$',
     'I wonder what you think your chances are, $$',
     'Huh, I don\'t see any reaction time,$$',
-    'When the term "fuck face" comes up, $$? Have you ever considered it as a synonym for "bear"?',
+    'When the term "fuck face" comes up? Have you ever considered it as a synonym for "$$"?',
     'don\'t you have better things to do, $$?',
     'It\s got nothing on this, you poor $$?',
     'the nun is naked, is that okay, $$?',
