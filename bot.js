@@ -1,6 +1,6 @@
 require('dotenv').config()
 const fs = require('fs')
-const { Client, Events, GatewayIntentBits } = require('discord.js');
+const {Client, Events, GatewayIntentBits} = require('discord.js');
 const {joinVoiceChannel} = require("@discordjs/voice");
 const client = new Client(
     {
@@ -12,8 +12,8 @@ const client = new Client(
         ]
     })
 
-client.on('ready',async () => {
-    const ch = client.channels.cache.find(c => c.name==="Generic Voice Chat Name")
+client.on('ready', async () => {
+    const ch = client.channels.cache.find(c => c.name === "Generic Voice Chat Name")
     joinVoiceChannel({
         channelId: ch.id,
         guildId: ch.guild.id,
@@ -34,7 +34,7 @@ client.on(Events.MessageCreate, async message => {
         if (body && body.players) {
             deaths = await handleDeaths(body, deaths, tts);
         }
-        if (!deaths){
+        if (!deaths) {
             tts.send(getSuccessMessage())
         }
     }
@@ -95,6 +95,26 @@ const messagesSuccess = [
     'if we keep up that learning curve we\'ll be halfway decent in about 10 years',
     'looks like we could start selling raids. only the easy ones tho.',
     'Congratulations! There\'s your reward for all the hard work you put in! Enjoy every bit of it!',
+    'we\'ve got a system people actually will use for stuff',
+    'you\'ve achieved a grand feat for a game made entirely by 7 people',
+    'it is a truly grand feat. we\'re proud of you.',
+    'I\'m impressed. Congrats',
+    'Do you think they feel more appreciated now?',
+    'We\'ve gotten something that, on its own, people will play, enjoy, and say "good job"',
+    'good job well. but it\'s when we pair it with all the other stuff they do well, makes it truly magnificent',
+    "You've finally done it. You have created a game that actually is polished",
+    "An outstanding game from start to finish",
+    "What makes it all work so well is how far along it was when it was first made",
+    'This is fantastic, thanks a lot for all the effort you put in',
+    'when you get done f***ing off after this, you could also turn the pc on again',
+    "I couldn't find a game that got it so far, so I decided to build one myself",
+    'Wow! Such progress',
+    "The game is a really solid, versatile, and fun one'",
+    'I was watching \'Rainbow Rocks\'',
+    'never knew it was possible. Well done, guys and girls!',
+    'suddenly my cheesesteak was awesome again!',
+    'that was smooth',
+    'Achieved all of these in a less than 2 year timeframe, with 7 people and a slightly different game engine (still voxel based) than most game developers!',
 ]
 
 //$$ as placeholders for playername, §§ as placeholders for fight name
@@ -220,8 +240,7 @@ const ignDiscordnameMap = new Map([
 ])
 
 
-  
-const Messages =  {
+const Messages = {
     [DISCORD_NAMES.VEX]: ['Looks like addons couldnt save you this time, Vex'],
     [DISCORD_NAMES.PASTA]: ['Megapasta Pasta way'],
     [DISCORD_NAMES.DINGLEBERRY]: ['Dinleberry? More like Cringeleberry', 'Don\'t take it personally, Dingle. §§ is clearly antisemitic.'],
