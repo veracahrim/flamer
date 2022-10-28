@@ -34,7 +34,9 @@ client.on(Events.MessageCreate, async message => {
         str = str.replaceAll(' ', '_')
         str = str.replaceAll('+', '_')
         str = str.replaceAll(':', '_')
-        fs.writeFileSync(str, JSON.stringify(body))
+        if(process.env.RECORD_JSON) {
+            fs.writeFileSync(`json/${str}`, JSON.stringify(body))
+        }
         let deaths = false
         let tts = client.channels.cache.find(c => c.name === 'tts')
         if (body && body.players) {
@@ -82,7 +84,6 @@ function getSuccessMessage() {
 function getDeathMessage(player, fight) {
     let msg = deathMessages[Math.floor(Math.random() * deathMessages.length)]
     let random = Math.random()
-    console.log(random)
     if (random < 0.1) {
         msg = Messages[player][Math.floor(Math.random() * Messages[player].length)]
     }
