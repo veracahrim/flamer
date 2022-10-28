@@ -6,7 +6,8 @@
     "discord.js": "^14.5.0",
     "dotenv": "^16.0.3",
     "libsodium-wrappers": "^0.7.10",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "prettier": "^2.7.1"
   },
   "main": "index.js",
   "scripts": {
