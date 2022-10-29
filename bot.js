@@ -114,6 +114,7 @@ function handleDeaths(players, fightName) {
     return getDeathMessage(finalNameToBeFlamed, fightName)
 }
 
+module.exports = getRandomDeadPlayerName
 function getRandomDeadPlayerName(players) {
     //todo: implement preference for people who died earliest in the fight
     const deadPlayers = players.filter(p => p.deathRecap)
