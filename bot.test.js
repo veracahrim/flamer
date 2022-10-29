@@ -8,5 +8,7 @@ test('test', () => {
         name: 'john dead',
         deathRecap: true
     }]
-    expect(getRandomDeadPlayerName(players)).toEqual('john dead')
+    const actualName = getRandomDeadPlayerName(players)
+    const expectedName = 'john dead'
+    expect(actualName).toEqual(expectedName)
 })
