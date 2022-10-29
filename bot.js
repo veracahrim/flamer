@@ -12,84 +12,160 @@ const client = new Client(
         ]
     })
 
-client.on('ready', async () => {
-    const ch = client.channels.cache.find(c => c.name === "Generic Voice Chat Name")
-    joinVoiceChannel({
-        channelId: ch.id,
-        guildId: ch.guild.id,
-        adapterCreator: ch.guild.voiceAdapterCreator,
+function joinConfiguredVoiceChannel() {
+    const channels = client.channels
+    const channelsCache = channels.cache
+    const activeVoiceChatChannel = channelsCache.find(c => c.name === process.env.DISCORD_VOICE_CHANNEL_NAME)
+    const channelGuild = activeVoiceChatChannel.guild
+    return joinVoiceChannel({
+        channelId: activeVoiceChatChannel.id,
+        guildId: channelGuild.id,
+        adapterCreator: channelGuild.voiceAdapterCreator
     });
-    console.log('i am sentient')
+}
+
+client.on('ready', async () => {
+    joinConfiguredVoiceChannel()
+    console.debug('I am sentient')
 })
 
-const recentlyFlamed = []
 client.on(Events.MessageCreate, async message => {
-    let url
-    if (message.embeds && message.embeds[0] && message.embeds[0].data) {
-        url = message.embeds[0].data.url
-    }
-    if ((message.author.username === 'Successful Log Uploader' || message.author.username === 'Failure Log Uploader') && url) {
-        let body = await getLogJSON(url);
-        let str = body.fightName + new Date().toString() + '.json'
-        str = str.replaceAll(' ', '_')
-        str = str.replaceAll('+', '_')
-        str = str.replaceAll(':', '_')
-        if(process.env.RECORD_JSON) {
-            fs.writeFileSync(`json/${str}`, JSON.stringify(body))
-        }
-        let deaths = false
-        let tts = client.channels.cache.find(c => c.name === 'tts')
-        if (body && body.players) {
-            deaths = await handleDeaths(body, deaths, tts);
-        }
-        if (!deaths) {
-            tts.send(getSuccessMessage())
-        }
-    }
+    const flamerBotMessage = await getFlamerBotMessage(message);
+    if (!flamerBotMessage) return
+    let tts = client.channels.cache.find(c => c.name === process.env.DISCORD_TTS_CHANNEL_NAME)
+    await tts.send(flamerBotMessage)
 });
 
 client.login(process.env.DISCORD_TOKEN)
 
-async function getLogJSON(url) {
+async function getFlamerBotMessage(message) {
+    const url = extractUrlFromMessage(message);
+    if (isInvalidUrl(url)) return
+    if (isInvalidUpload(message)) return
+    return await composeFlamerBotMessage(message)
+}
+
+function extractUrlFromMessage(message) {
+    const embeds = message.embeds
+    if (!(embeds && embeds[0])) return
+    const embedsData = embeds[0].data
+    return embedsData ? embedsData.url : undefined
+}
+
+function isInvalidUpload(message) {
+    const author = message.author
+    const authorName = author.username
+    const uploadedBySuccessUploader = authorName === 'Successful Log Uploader'
+    const uploadedByFailureUploader = authorName === 'Failure Log Uploader'
+    return !(uploadedBySuccessUploader || uploadedByFailureUploader);
+}
+
+function isInvalidUrl(url) {
+    return !!url;
+}
+
+async function composeFlamerBotMessage(url) {
+    const logData = await getLogDataFromApi(url);
+    return determineMessageType(logData);
+}
+
+async function getLogDataFromApi(url) {
+    const apiUrl = getApiUrl(url);
+    const res = await fetch(apiUrl)
+    const data = await res.json()
+    recordJsonFile(data);
+    return data;
+}
+
+function getApiUrl(url) {
     const splitUrl = url.split('/')
-    const permalink = splitUrl[splitUrl.length - 1]
-    const res = await fetch(`https://dps.report/getJson?permalink=${permalink}`)
-    return await res.json();
+    let lastSplitUrlElementIndex = splitUrl.length - 1;
+    const permalink = splitUrl[lastSplitUrlElementIndex]
+    return `https://dps.report/getJson?permalink=${permalink}`
 }
 
-async function handleDeaths(body, deaths, tts) {
-    let deads = body.players.filter(p => {
-        return p.deathRecap
-    })
-    if (deads && deads.length) {
-        const dead = deads[Math.floor(Math.random(deads.length))]
-        deaths = true
-        let name = dead.name
-        name = ignDiscordnameMap.get(name) ? ignDiscordnameMap.get(name) : name
-        const msg = getDeathMessage(name, body.fightName)
-        await tts.send(msg)
-        recentlyFlamed.unshift(name)
-        if (recentlyFlamed.length >= 3) {
-            recentlyFlamed.pop()
-        }
+//TODO: unit tests from here, can use generated test jsons as test data
+function determineMessageType(logData) {
+    const players = logData.players
+    const fightName = logData.fightName
+    if (nobodyDied(players)) {
+        return getSuccessMessage()
+    } else {
+        return handleDeaths(players, fightName);
     }
-    return deaths;
 }
 
+function nobodyDied(players) {
+    //todo: deathRecap is not a sound way to determine death.
+    // it doesn't factor in /GGs and instant wipes bc of enrages or failed mechanics
+    if (!players) return true
+    const deadPlayers = players.filter(p => p.deathRecap)
+    return !(deadPlayers && deadPlayers.length);
+}
 
 function getSuccessMessage() {
-    return messagesSuccess[Math.floor(Math.random() * messagesSuccess.length)]
+    const randomIndex = Math.floor(Math.random() * messagesSuccess.length)
+    return messagesSuccess[randomIndex]
 }
 
-function getDeathMessage(player, fight) {
-    let msg = deathMessages[Math.floor(Math.random() * deathMessages.length)]
-    let random = Math.random()
+function handleDeaths(players, fightName) {
+    const playerNameToBeFlamed = getRandomDeadPlayerName(players)
+    const finalNameToBeFlamed = getDiscordNameIfExists(playerNameToBeFlamed)
+    return getDeathMessage(finalNameToBeFlamed, fightName)
+}
+
+function getRandomDeadPlayerName(players) {
+    //todo: implement preference for people who died earliest in the fight
+    const deadPlayers = players.filter(p => p.deathRecap)
+    const randomIndex = Math.floor(Math.random() * deadPlayers.length)
+    const deadPlayer = deadPlayers[randomIndex]
+    return deadPlayer.name
+}
+
+function getDiscordNameIfExists(inGameName) {
+    const discordName = ignDiscordnameMap.get(inGameName)
+    return discordName ? discordName : inGameName;
+}
+
+function getDeathMessage(playerName, fightName) {
+    const deathMessage = determineDeathMessageType(playerName);
+    const messageWithPlayerName = deathMessage.replaceAll('$$', playerName)
+    return messageWithPlayerName.replaceAll('§§', fightName)
+}
+
+function determineDeathMessageType(playerName) {
+    const random = Math.random()
+    // 10% chance for personalized death message, otherwise a generic one appears
     if (random < 0.1) {
-        msg = Messages[player][Math.floor(Math.random() * Messages[player].length)]
+        return getIndividualDeathMessageElement(playerName)
     }
-    msg = msg.replace('$$', player)
-    msg = msg.replace('§§', fight)
-    return msg
+    return deathMessages[Math.floor(Math.random() * deathMessages.length)]
+}
+
+function getIndividualDeathMessageElement(playerName) {
+    const messageArrayLength = IndividualDeathMessages[playerName].length
+    const randomIndex = Math.floor(Math.random() * messageArrayLength)
+    return IndividualDeathMessages[playerName][randomIndex];
+}
+
+
+function formatJsonFileName(fightName) {
+    let fileName = fightName + new Date().toString() + '.json'
+    fileName = fileName.replaceAll(' ', '_')
+        .replaceAll('+', '_')
+        .replaceAll(':', '_')
+    return fileName
+}
+
+function recordJsonFile(logData) {
+    if (!process.env.RECORD_JSON) return;
+    const fightName = logData.fightName
+    if (!fightName) return;
+    const fileName = formatJsonFileName(fightName);
+    const callback = () => {
+        console.debug('successfully created json file')
+    }
+    fs.writeFile(`json/${fileName}`, JSON.stringify(logData), callback)
 }
 
 const messagesSuccess = [
@@ -128,12 +204,12 @@ const messagesSuccess = [
     'suddenly my cheesesteak was awesome again!',
     'that was smooth',
     'Achieved all of these in a less than 2 year timeframe, with 7 people and a slightly different game engine (still voxel based) than most game developers!',
-    'Kudos. You have come a long way. Very hard' ,
-    'Almost there. You\'re doing really well! Thanks for your effort. Let\'s keep it going!' ,
-    'How ya doin? Just got that high score on that level? You\'ve got a real shot at that diamond next!' ,
+    'Kudos. You have come a long way. Very hard',
+    'Almost there. You\'re doing really well! Thanks for your effort. Let\'s keep it going!',
+    'How ya doin? Just got that high score on that level? You\'ve got a real shot at that diamond next!',
     'Have fun chasing that diamond',
-    'good luck with the next level. we\'re right there with you' ,
-    'hahahahahha y\u003cp\u003eyeah and i\u003ccom\u003efeard it to. you\'ve got this.' ,
+    'good luck with the next level. we\'re right there with you',
+    'hahahahahha y\u003cp\u003eyeah and i\u003ccom\u003efeard it to. you\'ve got this.',
     'You must be the man! Congrats',
     'Yours in decadence and triumph!',
     'It\'s definitely the most ambitious writeup I\'ve seen here!',
@@ -241,7 +317,7 @@ const deathMessages = [
     'Hey, what\'s going on here, everyone, you gotta see this $$!',
 ]
 
-const DISCORD_NAMES = {
+const DiscordNames = {
     VERAC: 'Verac',
     FRED: 'Fred',
     PASTA: 'MegaPasta',
@@ -255,51 +331,51 @@ const DISCORD_NAMES = {
 }
 
 const ignDiscordnameMap = new Map([
-    ['Erdbeer Joghurt', DISCORD_NAMES.VERAC],
-    ['Schoggi Gipfeli', DISCORD_NAMES.VERAC],
-    ['Vorinia Gales', DISCORD_NAMES.VERAC],
-    ['Pia Oceania', DISCORD_NAMES.VERAC],
-    ['Tamn Vertand', DISCORD_NAMES.VERAC],
-    ['Chuchichäschtli', DISCORD_NAMES.VERAC],
-    ['Janamiri', DISCORD_NAMES.VERAC],
-    ['Fantastic Freya', DISCORD_NAMES.FRED],
-    ['Fantastic Fred', DISCORD_NAMES.FRED],
-    ['Ferocious Freya', DISCORD_NAMES.FRED],
-    ['Subpar Sabetha', DISCORD_NAMES.FRED],
-    ['Lil Kleintje', DISCORD_NAMES.PASTA],
-    ['Jokos Mommy', DISCORD_NAMES.PASTA],
-    ['Axetremely Norny', DISCORD_NAMES.PASTA],
-    ['Dolyak The Majestic', DISCORD_NAMES.AGENT],
-    ['Agent of Darkness', DISCORD_NAMES.AGENT],
-    ['Bubble Salami', DISCORD_NAMES.DERP],
-    ['Sadenean', DISCORD_NAMES.DERP],
-    ['Toxic Vex', DISCORD_NAMES.VEX],
-    ['Tinkerfurr', DISCORD_NAMES.VEX],
-    ['Lorna Deathknell', DISCORD_NAMES.SAMMI],
-    ['Miah Crossfire', DISCORD_NAMES.SAMMI],
-    ['Evelyn Thornroot', DISCORD_NAMES.SAMMI],
-    ['Carliah Whisperoak', DISCORD_NAMES.SAMMI],
-    ['Zalibeast', DISCORD_NAMES.ZALI],
-    ['Zali Nex', DISCORD_NAMES.ZALI],
-    ['Zalindrae', DISCORD_NAMES.ZALI],
-    ['Adriana Elise', DISCORD_NAMES.ZALI],
-    ['Doctor Dingleberry', DISCORD_NAMES.DINGLEBERRY],
-    ['Nagilmar', DISCORD_NAMES.DINGLEBERRY],
-    ['Look Im A Treeee', DISCORD_NAMES.DINGLEBERRY],
-    ['Shignis', DISCORD_NAMES.ENCIATKO],
-    ['Aileen Igniferous', DISCORD_NAMES.ENCIATKO],
+    ['Erdbeer Joghurt', DiscordNames.VERAC],
+    ['Schoggi Gipfeli', DiscordNames.VERAC],
+    ['Vorinia Gales', DiscordNames.VERAC],
+    ['Pia Oceania', DiscordNames.VERAC],
+    ['Tamn Vertand', DiscordNames.VERAC],
+    ['Chuchichäschtli', DiscordNames.VERAC],
+    ['Janamiri', DiscordNames.VERAC],
+    ['Fantastic Freya', DiscordNames.FRED],
+    ['Fantastic Fred', DiscordNames.FRED],
+    ['Ferocious Freya', DiscordNames.FRED],
+    ['Subpar Sabetha', DiscordNames.FRED],
+    ['Lil Kleintje', DiscordNames.PASTA],
+    ['Jokos Mommy', DiscordNames.PASTA],
+    ['Axetremely Norny', DiscordNames.PASTA],
+    ['Dolyak The Majestic', DiscordNames.AGENT],
+    ['Agent of Darkness', DiscordNames.AGENT],
+    ['Bubble Salami', DiscordNames.DERP],
+    ['Sadenean', DiscordNames.DERP],
+    ['Toxic Vex', DiscordNames.VEX],
+    ['Tinkerfurr', DiscordNames.VEX],
+    ['Lorna Deathknell', DiscordNames.SAMMI],
+    ['Miah Crossfire', DiscordNames.SAMMI],
+    ['Evelyn Thornroot', DiscordNames.SAMMI],
+    ['Carliah Whisperoak', DiscordNames.SAMMI],
+    ['Zalibeast', DiscordNames.ZALI],
+    ['Zali Nex', DiscordNames.ZALI],
+    ['Zalindrae', DiscordNames.ZALI],
+    ['Adriana Elise', DiscordNames.ZALI],
+    ['Doctor Dingleberry', DiscordNames.DINGLEBERRY],
+    ['Nagilmar', DiscordNames.DINGLEBERRY],
+    ['Look Im A Treeee', DiscordNames.DINGLEBERRY],
+    ['Shignis', DiscordNames.ENCIATKO],
+    ['Aileen Igniferous', DiscordNames.ENCIATKO],
 ])
 
 
-const Messages = {
-    [DISCORD_NAMES.VEX]: ['Looks like addons couldnt save you this time, Vex'],
-    [DISCORD_NAMES.PASTA]: ['Megapasta Pasta way'],
-    [DISCORD_NAMES.DINGLEBERRY]: ['Dinleberry? More like Cringeleberry', 'Don\'t take it personally, Dingle. §§ is clearly antisemitic.'],
-    [DISCORD_NAMES.VERAC]: ['So much for "Supreme Leader"'],
-    [DISCORD_NAMES.SAMMI]: ['Maybe you should stop eating during raids sammi.'],
-    [DISCORD_NAMES.ZALI]: ['maybe something easier to play would help, consider power mech, Zali'],
-    [DISCORD_NAMES.DERP]: ['username checks out, derp.'],
-    [DISCORD_NAMES.ENCIATKO]: ['Should have healed more, enciatko'],
-    [DISCORD_NAMES.FRED]: ['fred is dead'],
-    [DISCORD_NAMES.AGENT]: ['Unfortunately you still have to avoid damage as a power mech, agent.'],
+const IndividualDeathMessages = {
+    [DiscordNames.VEX]: ['Looks like addons couldnt save you this time, Vex'],
+    [DiscordNames.PASTA]: ['Megapasta Pasta way'],
+    [DiscordNames.DINGLEBERRY]: ['Dinleberry? More like Cringeleberry', 'Don\'t take it personally, Dingle. §§ is clearly antisemitic.'],
+    [DiscordNames.VERAC]: ['So much for "Supreme Leader"'],
+    [DiscordNames.SAMMI]: ['Maybe you should stop eating during raids sammi.'],
+    [DiscordNames.ZALI]: ['maybe something easier to play would help, consider power mech, Zali'],
+    [DiscordNames.DERP]: ['username checks out, derp.'],
+    [DiscordNames.ENCIATKO]: ['Should have healed more, enciatko'],
+    [DiscordNames.FRED]: ['fred is dead'],
+    [DiscordNames.AGENT]: ['Unfortunately you still have to avoid damage as a power mech, agent.'],
 }
