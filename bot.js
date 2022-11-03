@@ -80,7 +80,6 @@ function joinConfiguredVoiceChannel() {
 
 
 async function getFlamerBotMessage(message) {
-    debugLog('getting message')
     const url = extractUrlFromMessage(message);
     if (isInvalidUrl(url)) return
     if (isInvalidUpload(message)) return
@@ -136,8 +135,9 @@ function determineMessageType(logData) {
     const players = logData.players
     const fightName = logData.fightName
     const mechanics = logData.mechanics
-    // const mechanicsMessage = handleMechanics(mechanics, players)
-    if ( nobodyDied(players)) {
+    const mechanicsMessage = handleMechanics(mechanics, players)
+    if (mechanicsMessage) return mechanicsMessage
+    if (nobodyDied(players)) {
         return getSuccessMessage()}
     else {
         return handleDeaths(players, fightName);
@@ -145,16 +145,27 @@ function determineMessageType(logData) {
 }
 
 function handleMechanics(mechanics, players) {
-    if (Math.random() < 0.2) return
-    const player = getRandomDeadPlayerName(players)
+    //todo: check for priority mechanics first, like deimos blacks, full list of priority mechanics tbd
+    if (process.env.RECORD_JSON) fs.writeFileSync(`json/${uuid()}_mechanics.json`, JSON.stringify(mechanics))
+    const player = getFirstDeadPlayerName(players)
     if (!player) return
-    const mechanicsMissedByPlayer = mechanics.filter(m => m.mechanicsData.filter(md => md.actor === player))
-    const randomMechanic = mechanicsMissedByPlayer[Math.floor(Math.random() * mechanicsMissedByPlayer.length)]
+    const mechanicsWithoutDownedAndDeath = mechanics.filter(m =>( m.name !== 'Downed' && m.name !== 'Dead'))
+    const mechanicsMissedByPlayer = mechanicsWithoutDownedAndDeath.filter(m => m.mechanicsData.filter(md => md.actor === player))
     let count = 0
-    randomMechanic.mechanicsData.forEach( entry => {
-        if (entry.actor === player) count++
+    let mechanicName
+    let mechanicsMessage
+    let mechanicDescription
+    mechanicsMissedByPlayer.forEach(mechanic => {
+        mechanicsMessage = mechanicsMessageMap.get(mechanic.description)
+        if (mechanicsMessage) {
+            mechanicName = mechanic.name
+            mechanicDescription = mechanic.description
+        }
     })
-    return `imagine getting hit by ${randomMechanic.name} ${count} times. What an embarrassment`
+    mechanicsMissedByPlayer.forEach(m => {
+        if (m.name === mechanicName) count++
+    })
+    return getMechanicsMessage(player, mechanicName, mechanicDescription, count, mechanicsMessage)
 }
 
 function nobodyDied(players) {
@@ -171,14 +182,14 @@ function getSuccessMessage() {
 }
 
 function handleDeaths(players, fightName) {
-    const playerNameToBeFlamed = getRandomDeadPlayerName(players)
+    const playerNameToBeFlamed = getFirstDeadPlayerName(players)
     const finalNameToBeFlamed = getDiscordNameIfExists(playerNameToBeFlamed)
     return getDeathMessage(finalNameToBeFlamed, fightName)
 }
 
-module.exports = getRandomDeadPlayerName
+module.exports = getFirstDeadPlayerName
 
-function getRandomDeadPlayerName(players) {
+function getFirstDeadPlayerName(players) {
     const deadPlayers = players.filter(p => p.deathRecap)
     const deadPlayersSortedByDeathTime = deadPlayers.sort((a, b) => a.deathRecap[0].deathTime > b.deathRecap[0].deathTime ? 1:-1)
     const deadPlayer = deadPlayersSortedByDeathTime[0]
@@ -194,6 +205,15 @@ function getDeathMessage(playerName, fightName) {
     const deathMessage = determineDeathMessageType(playerName);
     const messageWithPlayerName = deathMessage.replaceAll('$$', playerName)
     return messageWithPlayerName.replaceAll('§§', fightName)
+}
+
+function getMechanicsMessage(playerName, mechanicName, mechanicDescription, countHit, message) {
+    if (message === undefined) return
+    let formatted = message.replaceAll('°°', countHit)
+    formatted = formatted.replaceAll('++', mechanicDescription)
+    formatted = formatted.replaceAll('$$', playerName)
+    formatted = formatted.replaceAll('||', mechanicName)
+    return formatted
 }
 
 function determineDeathMessageType(playerName) {
@@ -213,8 +233,7 @@ function getIndividualDeathMessageElement(playerName) {
 
 
 function formatJsonFileName(fightName) {
-    let fileName = fightName + uuid() + '.json'
-    return fileName
+    return fightName + uuid() + '.json'
 }
 
 function recordJsonFile(logData) {
@@ -317,7 +336,7 @@ const DiscordNames = {
     FRED: 'Fred',
     PASTA: 'MegaPasta',
     AGENT: 'Agent',
-    DERP: 'Derp',
+    ASTER: 'Aster',
     VEX: 'Vex',
     SAMMI: 'Sammi',
     ZALI: 'Zali',
@@ -342,8 +361,7 @@ const ignDiscordnameMap = new Map([
     ['Axetremely Norny', DiscordNames.PASTA],
     ['Dolyak The Majestic', DiscordNames.AGENT],
     ['Agent of Darkness', DiscordNames.AGENT],
-    ['Bubble Salami', DiscordNames.DERP],
-    ['Sadenean', DiscordNames.DERP],
+    ['Aster Fflur', DiscordNames.ASTER],
     ['Toxic Vex', DiscordNames.VEX],
     ['Tinkerfurr', DiscordNames.VEX],
     ['Lorna Deathknell', DiscordNames.SAMMI],
@@ -366,11 +384,18 @@ const IndividualDeathMessages = {
     [DiscordNames.VEX]: ['Looks like addons couldnt save you this time, Vex'],
     [DiscordNames.PASTA]: ['Megapasta Pasta way'],
     [DiscordNames.DINGLEBERRY]: ['Dinleberry? More like Cringeleberry', 'Don\'t take it personally, Dingle. §§ is clearly antisemitic.'],
-    [DiscordNames.VERAC]: ['So much for "Supreme Leader"'],
+    [DiscordNames.VERAC]: ['So much for "Supreme Leader", verac'],
     [DiscordNames.SAMMI]: ['Maybe you should stop eating during raids sammi.'],
     [DiscordNames.ZALI]: ['maybe something easier to play would help, consider power mech, Zali'],
-    [DiscordNames.DERP]: ['username checks out, derp.'],
+    [DiscordNames.ASTER]: ['We\'re not gonna flame our newest recruit, are we?'],
     [DiscordNames.ENCIATKO]: ['Should have healed more, enciatko'],
     [DiscordNames.FRED]: ['fred is dead'],
     [DiscordNames.AGENT]: ['Unfortunately you still have to avoid damage as a power mech, agent.'],
 }
+
+//$$ = playerName
+//°° = count of mechanic failed
+const mechanicsMessageMap = new Map([
+    ['Received Exposed stack', 'Look at $$, getting °° exposed stacks in total, your healers indeed were carrying you!'],
+    ['Rapid Decay Trigger (Black expanding oil)', 'If you wonder who is the impostor, it\'s $$, triggered the oil a total of °° times!']
+])
