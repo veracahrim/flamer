@@ -1,0 +1,922 @@
+{
+  "mechanics": [
+    {
+      "mechanicsData": [
+        {
+          "time": 71234,
+          "actor": "Dolyak The Majestic"
+        }
+      ],
+      "name": "Dead",
+      "description": "Dead"
+    },
+    {
+      "mechanicsData": [
+        {
+          "time": 15035,
+          "actor": "Lorna Deathknell"
+        },
+        {
+          "time": 42833,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 58032,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 71234,
+          "actor": "Rachel Lleeth"
+        },
+        {
+          "time": 82732,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 87133,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 95233,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 96633,
+          "actor": "Lorna Deathknell"
+        }
+      ],
+      "name": "Downed",
+      "description": "Downed"
+    },
+    {
+      "mechanicsData": [
+        {
+          "time": 17285,
+          "actor": "Shignis"
+        },
+        {
+          "time": 17684,
+          "actor": "Phantaline"
+        },
+        {
+          "time": 46324,
+          "actor": "Chuchichäschtli"
+        },
+        {
+          "time": 49281,
+          "actor": "Chuchichäschtli"
+        },
+        {
+          "time": 72254,
+          "actor": "Fabulous Freya"
+        },
+        {
+          "time": 74242,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 83849,
+          "actor": "Phantaline"
+        },
+        {
+          "time": 84569,
+          "actor": "Rifle One Enjoyer"
+        },
+        {
+          "time": 88617,
+          "actor": "Shignis"
+        },
+        {
+          "time": 89251,
+          "actor": "Chuchichäschtli"
+        },
+        {
+          "time": 97535,
+          "actor": "Fabulous Freya"
+        },
+        {
+          "time": 98320,
+          "actor": "Chuchichäschtli"
+        },
+        {
+          "time": 99325,
+          "actor": "Rifle One Enjoyer"
+        },
+        {
+          "time": 100604,
+          "actor": "Phantaline"
+        }
+      ],
+      "name": "Res",
+      "description": "Res"
+    },
+    {
+      "mechanicsData": [
+        {
+          "time": 19332,
+          "actor": "Lorna Deathknell"
+        },
+        {
+          "time": 50333,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 75032,
+          "actor": "Rachel Lleeth"
+        },
+        {
+          "time": 85932,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 89633,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 100534,
+          "actor": "Lorna Deathknell"
+        },
+        {
+          "time": 103632,
+          "actor": "Tinkerfurr"
+        }
+      ],
+      "name": "Got up",
+      "description": "Got up"
+    },
+    {
+      "mechanicsData": [
+        {
+          "time": 27882,
+          "actor": "Zalinyx"
+        },
+        {
+          "time": 27882,
+          "actor": "Zalinyx"
+        },
+        {
+          "time": 36773,
+          "actor": "Rifle One Enjoyer"
+        },
+        {
+          "time": 36773,
+          "actor": "Shignis"
+        },
+        {
+          "time": 111893,
+          "actor": "Shignis"
+        },
+        {
+          "time": 140140,
+          "actor": "Rifle One Enjoyer"
+        },
+        {
+          "time": 140140,
+          "actor": "Rifle One Enjoyer"
+        },
+        {
+          "time": 144615,
+          "actor": "Shignis"
+        }
+      ],
+      "name": "Port",
+      "description": "Orange Teleport Field"
+    },
+    {
+      "mechanicsData": [
+        {
+          "time": 42733,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 70931,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 70931,
+          "actor": "Shignis"
+        },
+        {
+          "time": 94773,
+          "actor": "Shignis"
+        },
+        {
+          "time": 122252,
+          "actor": "Shignis"
+        },
+        {
+          "time": 136334,
+          "actor": "Zalinyx"
+        }
+      ],
+      "name": "Green",
+      "description": "Green Spatial Manipulation Field (lift)"
+    },
+    {
+      "mechanicsData": [
+        {
+          "time": 122252,
+          "actor": "Fabulous Freya"
+        },
+        {
+          "time": 136334,
+          "actor": "Fabulous Freya"
+        }
+      ],
+      "name": "Stab.Green",
+      "description": "Green Spatial Manipulation Field while affected by stability"
+    },
+    {
+      "mechanicsData": [
+        {
+          "time": 2287,
+          "actor": "Rachel Lleeth"
+        },
+        {
+          "time": 2335,
+          "actor": "Rachel Lleeth"
+        },
+        {
+          "time": 2335,
+          "actor": "Phantaline"
+        },
+        {
+          "time": 2367,
+          "actor": "Chuchichäschtli"
+        },
+        {
+          "time": 2367,
+          "actor": "Chuchichäschtli"
+        },
+        {
+          "time": 2367,
+          "actor": "Phantaline"
+        },
+        {
+          "time": 2367,
+          "actor": "Rachel Lleeth"
+        },
+        {
+          "time": 2415,
+          "actor": "Chuchichäschtli"
+        },
+        {
+          "time": 2415,
+          "actor": "Chuchichäschtli"
+        },
+        {
+          "time": 2415,
+          "actor": "Rachel Lleeth"
+        },
+        {
+          "time": 2415,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 2415,
+          "actor": "Phantaline"
+        },
+        {
+          "time": 2448,
+          "actor": "Chuchichäschtli"
+        },
+        {
+          "time": 2448,
+          "actor": "Rachel Lleeth"
+        },
+        {
+          "time": 2448,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 2498,
+          "actor": "Rachel Lleeth"
+        },
+        {
+          "time": 2498,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 2498,
+          "actor": "Chuchichäschtli"
+        },
+        {
+          "time": 2527,
+          "actor": "Chuchichäschtli"
+        },
+        {
+          "time": 2527,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 2527,
+          "actor": "Rachel Lleeth"
+        },
+        {
+          "time": 2575,
+          "actor": "Shignis"
+        },
+        {
+          "time": 2575,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 2575,
+          "actor": "Fabulous Freya"
+        },
+        {
+          "time": 2575,
+          "actor": "Rachel Lleeth"
+        },
+        {
+          "time": 2575,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 2607,
+          "actor": "Shignis"
+        },
+        {
+          "time": 2607,
+          "actor": "Fabulous Freya"
+        },
+        {
+          "time": 2607,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 2655,
+          "actor": "Shignis"
+        },
+        {
+          "time": 2655,
+          "actor": "Fabulous Freya"
+        },
+        {
+          "time": 2655,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 2687,
+          "actor": "Shignis"
+        },
+        {
+          "time": 2687,
+          "actor": "Fabulous Freya"
+        },
+        {
+          "time": 2687,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 2735,
+          "actor": "Shignis"
+        },
+        {
+          "time": 2735,
+          "actor": "Fabulous Freya"
+        },
+        {
+          "time": 2735,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 2767,
+          "actor": "Shignis"
+        },
+        {
+          "time": 10373,
+          "actor": "Fabulous Freya"
+        },
+        {
+          "time": 19175,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 19207,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 23600,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 23649,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 28090,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 28123,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 28170,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 28218,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 28250,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 28282,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 28330,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 28846,
+          "actor": "Zalinyx"
+        },
+        {
+          "time": 28895,
+          "actor": "Zalinyx"
+        },
+        {
+          "time": 28926,
+          "actor": "Zalinyx"
+        },
+        {
+          "time": 28974,
+          "actor": "Zalinyx"
+        },
+        {
+          "time": 46855,
+          "actor": "Chuchichäschtli"
+        },
+        {
+          "time": 46889,
+          "actor": "Chuchichäschtli"
+        },
+        {
+          "time": 46937,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 46937,
+          "actor": "Chuchichäschtli"
+        },
+        {
+          "time": 46968,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 46968,
+          "actor": "Chuchichäschtli"
+        },
+        {
+          "time": 47016,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 47016,
+          "actor": "Chuchichäschtli"
+        },
+        {
+          "time": 47048,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 47048,
+          "actor": "Chuchichäschtli"
+        },
+        {
+          "time": 47096,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 47097,
+          "actor": "Chuchichäschtli"
+        },
+        {
+          "time": 47128,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 55686,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 55733,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 55766,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 55814,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 60291,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 60337,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 60369,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 60417,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 60451,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 60481,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 60531,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 75057,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 75089,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 79322,
+          "actor": "Fabulous Freya"
+        },
+        {
+          "time": 79371,
+          "actor": "Fabulous Freya"
+        },
+        {
+          "time": 83817,
+          "actor": "Fabulous Freya"
+        },
+        {
+          "time": 83849,
+          "actor": "Fabulous Freya"
+        },
+        {
+          "time": 98779,
+          "actor": "Shignis"
+        },
+        {
+          "time": 98811,
+          "actor": "Shignis"
+        },
+        {
+          "time": 98843,
+          "actor": "Shignis"
+        },
+        {
+          "time": 98892,
+          "actor": "Shignis"
+        },
+        {
+          "time": 99004,
+          "actor": "Shignis"
+        },
+        {
+          "time": 99246,
+          "actor": "Fabulous Freya"
+        },
+        {
+          "time": 99246,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 99293,
+          "actor": "Fabulous Freya"
+        },
+        {
+          "time": 99294,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 99325,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 99325,
+          "actor": "Fabulous Freya"
+        },
+        {
+          "time": 99373,
+          "actor": "Fabulous Freya"
+        },
+        {
+          "time": 99374,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 107651,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 107651,
+          "actor": "Lorna Deathknell"
+        },
+        {
+          "time": 107682,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 107683,
+          "actor": "Lorna Deathknell"
+        },
+        {
+          "time": 126165,
+          "actor": "Phantaline"
+        },
+        {
+          "time": 126212,
+          "actor": "Phantaline"
+        },
+        {
+          "time": 126245,
+          "actor": "Phantaline"
+        },
+        {
+          "time": 126293,
+          "actor": "Phantaline"
+        },
+        {
+          "time": 126293,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 126324,
+          "actor": "Phantaline"
+        },
+        {
+          "time": 126324,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 126372,
+          "actor": "Phantaline"
+        },
+        {
+          "time": 126404,
+          "actor": "Phantaline"
+        },
+        {
+          "time": 126532,
+          "actor": "Phantaline"
+        },
+        {
+          "time": 126564,
+          "actor": "Phantaline"
+        },
+        {
+          "time": 140815,
+          "actor": "Shignis"
+        },
+        {
+          "time": 140847,
+          "actor": "Shignis"
+        },
+        {
+          "time": 140893,
+          "actor": "Shignis"
+        },
+        {
+          "time": 140925,
+          "actor": "Shignis"
+        },
+        {
+          "time": 140973,
+          "actor": "Shignis"
+        },
+        {
+          "time": 141005,
+          "actor": "Shignis"
+        }
+      ],
+      "name": "KB",
+      "description": "Knockback Crystals (tornado like)"
+    },
+    {
+      "mechanicsData": [
+        {
+          "time": 21977,
+          "actor": "Dolyak The Majestic"
+        },
+        {
+          "time": 42090,
+          "actor": "Shignis"
+        },
+        {
+          "time": 62167,
+          "actor": "Zalinyx"
+        },
+        {
+          "time": 82649,
+          "actor": "Fabulous Freya"
+        },
+        {
+          "time": 103534,
+          "actor": "Phantaline"
+        },
+        {
+          "time": 123646,
+          "actor": "Shignis"
+        },
+        {
+          "time": 143686,
+          "actor": "Zalinyx"
+        }
+      ],
+      "name": "Agony",
+      "description": "Shared Agony Debuff Application"
+    },
+    {
+      "mechanicsData": [
+        {
+          "time": 48088,
+          "actor": "Rifle One Enjoyer"
+        },
+        {
+          "time": 51091,
+          "actor": "Rifle One Enjoyer"
+        },
+        {
+          "time": 54091,
+          "actor": "Zalinyx"
+        },
+        {
+          "time": 68178,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 69087,
+          "actor": "Phantaline"
+        },
+        {
+          "time": 71165,
+          "actor": "Chuchichäschtli"
+        },
+        {
+          "time": 72094,
+          "actor": "Phantaline"
+        },
+        {
+          "time": 84089,
+          "actor": "Zalinyx"
+        },
+        {
+          "time": 87097,
+          "actor": "Zalinyx"
+        },
+        {
+          "time": 90082,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 94643,
+          "actor": "Lorna Deathknell"
+        },
+        {
+          "time": 95176,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 96087,
+          "actor": "Rachel Lleeth"
+        },
+        {
+          "time": 104176,
+          "actor": "Rifle One Enjoyer"
+        },
+        {
+          "time": 106530,
+          "actor": "Rachel Lleeth"
+        },
+        {
+          "time": 106642,
+          "actor": "Shignis"
+        },
+        {
+          "time": 109522,
+          "actor": "Chuchichäschtli"
+        },
+        {
+          "time": 109650,
+          "actor": "Shignis"
+        }
+      ],
+      "name": "Agony 25",
+      "description": "Shared Agony Damage (25% Player's HP)"
+    },
+    {
+      "mechanicsData": [
+        {
+          "time": 48088,
+          "actor": "Zalinyx"
+        },
+        {
+          "time": 51091,
+          "actor": "Zalinyx"
+        },
+        {
+          "time": 54091,
+          "actor": "Rifle One Enjoyer"
+        },
+        {
+          "time": 68178,
+          "actor": "Rachel Lleeth"
+        },
+        {
+          "time": 71166,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 87097,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 94643,
+          "actor": "Zalinyx"
+        },
+        {
+          "time": 95176,
+          "actor": "Fabulous Freya"
+        },
+        {
+          "time": 106530,
+          "actor": "Chuchichäschtli"
+        }
+      ],
+      "name": "Agony 50",
+      "description": "Shared Agony Damage (50% Player's HP)"
+    },
+    {
+      "mechanicsData": [
+        {
+          "time": 68178,
+          "actor": "Lorna Deathknell"
+        },
+        {
+          "time": 71166,
+          "actor": "Rachel Lleeth"
+        },
+        {
+          "time": 94643,
+          "actor": "Tinkerfurr"
+        },
+        {
+          "time": 95176,
+          "actor": "Lorna Deathknell"
+        },
+        {
+          "time": 106530,
+          "actor": "Lorna Deathknell"
+        }
+      ],
+      "name": "Agony 75",
+      "description": "Shared Agony Damage (75% Player's HP)"
+    },
+    {
+      "mechanicsData": [
+        {
+          "time": 150522,
+          "actor": "Chuchichäschtli"
+        },
+        {
+          "time": 150522,
+          "actor": "Rifle One Enjoyer"
+        },
+        {
+          "time": 150650,
+          "actor": "Fabulous Freya"
+        },
+        {
+          "time": 150682,
+          "actor": "Rachel Lleeth"
+        },
+        {
+          "time": 150682,
+          "actor": "Lorna Deathknell"
+        },
+        {
+          "time": 155172,
+          "actor": "Tinkerfurr"
+        }
+      ],
+      "name": "Leap",
+      "description": "Jump between green fields"
+    }
+  ]
+}
